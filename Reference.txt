@@ -1,0 +1,17 @@
+global : playerid -- used to store the id of the player in the entmanager (first created when loading a map)
+---------------------------------
+gamemanager.state (startup : 0)
+
+The game states :
+-- 0 for menu drawing.
+-- 1 for game playing.
+-- 2 for map editing.
+-- 3 for map editing testing.
+
+---------------------------------
+colorutils :
+colorutils:new for 0-1 values and colorutils:neww for 255 values (will automatically convert them to 0-1)
+
+---------------------------------
+player :
+player.currverticalvel and player.self.currhorizontvel for vertical and horizontal velocity.
