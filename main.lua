@@ -86,7 +86,9 @@ function love.update(dt)
 	elseif love.keyboard.isDown("left") then
 		camera:translate(-100*dt, 0);
 	elseif love.keyboard.isDown("up") then
-		camera:set_rotation(math.pi/3);
+		camera:rotate(-math.pi/3 * dt);
+	elseif love.keyboard.isScancodeDown("down") then
+		camera:rotate(math.pi/3 * dt);
 	end
 
 	camera:update(dt)

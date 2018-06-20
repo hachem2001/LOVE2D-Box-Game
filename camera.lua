@@ -8,7 +8,7 @@ camera.scale = 1;
 camera.shearx = 0;
 camera.sheary = 0;
 camera.angle = 0;
-camera.ox, camera.oy = 0, 0;
+camera.ox, camera.oy = width/2, height/2;
 
 camera.transform = love.math.newTransform(camera.x, camera.y, camera.angle,camera.scale, camera.scale,camera.ox, camera.oy, camera.shearx, camera.sheary);
 camera.inv_transform = camera.transform:inverse();
@@ -16,7 +16,7 @@ camera.inv_transform = camera.transform:inverse();
 camera.needs_update = false;
 
 function camera:set()
-	love.graphics.applyTransform(self.transform);
+	love.graphics.replaceTransform(self.transform);
 end
 
 function camera:unset()
@@ -41,6 +41,7 @@ function camera:set_origin(x, y)
 	camera.ox = x;
 	camera.oy = y;
 	camera.needs_update = true;
+	camera.needs_update = true;
 end
 
 function camera:get_origin()
@@ -59,6 +60,14 @@ end
 
 function camera:get_rotation()
 	return camera.angle;
+end
+
+function camera:update(dt)
+	if camera.needs_update then
+		camera.transform = camera.transform:replaceTransform(camera.x, camera.y, camera.angle,camera.scale, camera.scale,camera.ox, camera.oy, camera.shearx, camera.sheary);
+		camera.inv_transform = camera.transform:inverse();
+		camera.needs_update = false;
+	end
 end
 
 return camera;
