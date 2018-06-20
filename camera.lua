@@ -63,6 +63,7 @@ function camera:get_rotation()
 end
 
 function camera:update(dt)
+	-- Small fix commit
 	if camera.needs_update then
 		camera.transform = camera.transform:replaceTransform(camera.x, camera.y, camera.angle,camera.scale, camera.scale,camera.ox, camera.oy, camera.shearx, camera.sheary);
 		camera.inv_transform = camera.transform:inverse();
