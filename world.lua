@@ -1,4 +1,4 @@
-local maploader = maploader or require "maploader"
+local maploader = maploader or error("Map loader not loaded before use of world class");
 local world = {}
 world.map = {}
 world.collision_tiles = {}
@@ -8,16 +8,17 @@ function world:setmap(filepath)
 	self.map = map;
 	for k,v in pairs(self.map.layers) do
 		if v.properties.collision == true then
-			for x = 1, self.map.w do -- map.w is the width of the map
-				for y=1,self.map.h do
+			for x = 0, self.map.w-1 do -- map.w is the width of the map
+				for y=0,self.map.h-1 do
 					local m = v.grid[x][y]
 					if m~=0 then
-						self.collision_tiles[#self.collision_tiles+1] = {grid_x=x, grid_y=y, x=(x-1)*self.map.tw, y=(y-1)*self.map.th}; -- The tile width and height are ommitted because they're already saved in the map.
+						self.collision_tiles[#self.collision_tiles+1] = {grid_x=x, grid_y=y, x=x*self.map.tw, y=y*self.map.th}; -- The tile width and height are ommitted because they're already saved in the map.
 					end
 				end
 			end
 		end
 	end
+	entmanager:new("player", self.map.spawn_points[1])
 end
 
 function world:draw()
@@ -35,22 +36,26 @@ function world:collide(obj) -- AABB collision, returns how much to go out in X a
 	for k,v in pairs(self.collision_tiles) do
 		local dx = x-v.x;
 		local dy = y-v.y;
-		if dx < tw and dx > -w and dy < ty  and dy > tx then
+		if dx < tw and dx > -w and dy < th and dy > -h then
+			print("COLLISION")
 			local depthx, depthy = 0,0;
 			if math.abs(dx-tw)>math.abs(dx+w) then
-				depthx = w;
+				depthx = dx+w;
 			else
-				depthx = -tw;
+				depthx = dx-tw;
 			end
 			if math.abs(dy-th)>math.abs(dy+h) then
-				depthy = h;
+				depthy = dy+h;
 			else
-				depthy = -th;
+				depthy = dy-th;
+			end
+			if math.abs(depthx)>math.abs(depthy) then
+				depthx = 0;
+			else
+				depthy = 0;
 			end
 			obj.x = obj.x - depthx;
 			obj.y = obj.y - depthy;
-			x = obj.x;
-			y = obj.y;
 			return true, k, depthx, depthy -- collision happens? return the index of the collision tile, and the depth of the collision
 		end
 	end

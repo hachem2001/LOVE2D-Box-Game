@@ -8,7 +8,7 @@ camera.scale = 1;
 camera.shearx = 0;
 camera.sheary = 0;
 camera.angle = 0;
-camera.ox, camera.oy = width/2, height/2;
+camera.ox, camera.oy = -width/2, -height/2;
 
 camera.transform = love.math.newTransform(camera.x, camera.y, camera.angle,camera.scale, camera.scale,camera.ox, camera.oy, camera.shearx, camera.sheary);
 camera.inv_transform = camera.transform:inverse();
@@ -24,13 +24,15 @@ function camera:unset()
 end
 
 function camera:translate(dx, dy)
-	camera.x, camera.y = camera.x + dx, camera.y + dy;
+	camera.x, camera.y = camera.x - dx, camera.y - dy;
 	camera.needs_update = true;
 end
 
 function camera:set_position(x, y)
-	camera.x, camera.y = x, y;
-	camera.needs_update = true;
+	if not (camera.x == -x and camera.y == -y) then
+		camera.x, camera.y = -x, -y;
+		camera.needs_update = true;
+	end
 end
 
 function camera:get_position()
@@ -65,7 +67,7 @@ end
 function camera:update(dt)
 	-- Small fix commit
 	if camera.needs_update then
-		camera.transform = camera.transform:replaceTransform(camera.x, camera.y, camera.angle,camera.scale, camera.scale,camera.ox, camera.oy, camera.shearx, camera.sheary);
+		camera.transform = camera.transform:setTransformation(camera.x, camera.y, camera.angle, camera.scale, camera.scale, camera.ox, camera.oy, camera.shearx, camera.sheary);
 		camera.inv_transform = camera.transform:inverse();
 		camera.needs_update = false;
 	end

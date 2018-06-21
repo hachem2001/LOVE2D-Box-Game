@@ -39,27 +39,27 @@ function maploader.loadmap(filepath)
 			
 			local grid = {};
 			
-			for x=1,layerwidth do
+			for x=0,layerwidth-1 do
 				grid[x] = {}
-				for y=1,layerheight do
+				for y=0,layerheight-1 do
 					grid[x][y] = 0;
 				end
 			end
 			
 			local datasize = #v.data
 			
-			for m=1, datasize do
-				local x = ((m-1)%layerwidth)+1
-				local y = math.floor(m/100)
+			for m=0, datasize-1 do
+				local x = m%layerwidth
+				local y = math.floor(m/layerwidth)
 				
-				local data_value = v.data[m];
+				local data_value = v.data[m+1];
 				
 				grid[x][y] = data_value;
 				if not (data_value<=0) then
 					for k2,v2 in pairs(tilesets) do
 						if data_value>=v2.start_count and data_value <= v2.end_count then
 							if not sprite_batches[k2] then sprite_batches[k2] = love.graphics.newSpriteBatch(v2.image) end
-							sprite_batches[k2]:add(v2.quads[data_value-v2.start_count+1], (x-1)*v2.tw, y*v2.th);
+							sprite_batches[k2]:add(v2.quads[data_value-v2.start_count+1], x*v2.tw, y*v2.th);
 						end
 					end
 				end

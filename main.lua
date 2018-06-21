@@ -11,19 +11,19 @@ function love.load()
 	mousex,mousey	= love.mouse.getPosition()				-- Get the position of the mouse
 
 	--[[
-	mathutils		= require "apis/mathutils"	-- math		utilities library
-	vector			= require "apis/vector"			-- vector	utilities library
+	mathutils	= require "apis/mathutils"	-- math		utilities library
+	vector		= require "apis/vector"			-- vector	utilities library
 	tableutils	= require "apis/tableutils"	-- table	utilities library
 	colorutils	= require "apis/colorutils"	-- color	utilities library
-	collision		= require "apis/collision"	-- collision library
+	collision	= require "apis/collision"	-- collision library
 
 	background	=	require "background"			-- Background to render in the menu
 	
-	world 			= require "world" 					-- world library
+	world 		= require "world" 					-- world library
 	entmanager	= require "entities"				-- entmanager library
-	mapeditor		=	require "mapeditor"				-- this is the map editor.
+	mapeditor	=	require "mapeditor"				-- this is the map editor.
 
-	menu				= require "menu"						-- this is the startup menu.
+	menu		= require "menu"						-- this is the startup menu.
 	gamemanager = require "gamemanager"			-- this is the game manager.
 	audiomanager= require "audiomanager"		-- this is the audio manager.
 
@@ -52,12 +52,16 @@ function love.load()
 		end
 	end]]--
 	
+	colorutils	= require "apis/colorutils"			-- Initialize the colorutils library
+
+	camera 		= require "camera"					-- The camera library
+	maploader 	= require "maploader"				-- The map loader (mainly used by the world module)
+	entmanager	= require "entities"				-- Entmanager library for managing entities
+	world 		= require "world"					-- World module
+
+	entmanager:load() -- Make sure to make the entity manager initialize
 	
-	maploader = require "maploader"
-	world = require "world"
-	camera = require "camera"
-	
-	world:setmap("maps/test map.lua");
+	world:setmap("maps/test map.lua"); -- The world will, for this test, add the player automatically
 	--map = maploader.loadmap("maps/test map.lua")
 	
 end
@@ -72,7 +76,10 @@ function love.draw()
 	gamemanager:draw()
 	]]--
 	camera:set()
+
 	world:draw()
+	entmanager:draw()
+
 	camera:unset()
 end
 
@@ -81,16 +88,13 @@ function love.update(dt)
 	--[[
 	gamemanager:update(dt)													-- Update using the gamemanager ( update depending on the state )
 	]]--
-	if love.keyboard.isDown("right") then
-		camera:translate(100*dt, 0);
-	elseif love.keyboard.isDown("left") then
-		camera:translate(-100*dt, 0);
-	elseif love.keyboard.isDown("up") then
+	if love.keyboard.isDown("i") then
 		camera:rotate(-math.pi/3 * dt);
-	elseif love.keyboard.isScancodeDown("down") then
+	elseif love.keyboard.isScancodeDown("o") then
 		camera:rotate(math.pi/3 * dt);
 	end
 
+	entmanager:update(dt)
 	camera:update(dt)
 end
 

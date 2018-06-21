@@ -14,10 +14,11 @@ local player = entmanager:rawnew("base") -- Basically "INHERIT" what base.lua ha
 --]]--
 
 --local vector = require "apis/vector"
-local world = require "world" -- gain access to the world in order to be able to call it's functions
+local world = world or error("World not loaded before the making of the player entitie") -- assure access to the world in order to be able to call it's functions
+local camera = camera or error("Camera not loaded before the use of the player entitie") -- assure access to the camera
 
-player.w, player.h, player.x, player.y = 80,80, 32, 32;
-player.currcolor = colorutils:neww(123,123,188,255);
+player.w, player.h, player.x, player.y = 32,32, 32, 32;
+player.color = colorutils:neww(123,123,188,255);
 player.collision = true -- Used to enable collision
 
 player.iscontrolled = true -- To be updated later
@@ -32,7 +33,6 @@ function player:setinfo(tbl) -- sets the info, self explanatory
 	player.movementspeed = 100*self.w/32;
 end
 
-local sign = mathutils.sign
 --
 --> GENERAL STUFF ------------------------------------------------------------------------------------------------------------------
 --
@@ -46,22 +46,22 @@ function player:draw() -- Draw the player
 end
 
 function player:update(dt) -- Update the player info
-	self:updatepos(dt)
-	player:checkgoalreached()
 	if self.iscontrolled then -- If the player is controllable
-		local mx, my = 0;
+		local mx, my = 0, 0;
 		if love.keyboard.isDown("right") then -- movement detection
 			mx = self.movementspeed*dt
 		elseif love.keyboard.isDown("left") then
 			mx = -self.movementspeed*dt
 		end
-		if love.keyboard.isDown("up") then
+		if love.keyboard.isDown("down") then
 			my = self.movementspeed*dt
-		elseif love.keyboard.isDown("down") then
+		elseif love.keyboard.isDown("up") then
 			my = -self.movementspeed*dt
 		end
 		self:move(mx, my);
 	end
+	camera:set_position(self.x, self.y)
+	print(self.x, self.y)
 end
 
 --
