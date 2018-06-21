@@ -69,6 +69,11 @@ function vector.__pow(op1, op2)
 	return (op1/vector.getlength(op1))*m
 end
 
+local m = {x=1, y=2, z=3, w=4, r=1, g=2, b=3, a=4} -- basic ways of requesting an element from 
+function vector.__index(op1, ind)
+	return op1[m[ind]] or error("Attempt to get "..ind.." of vector, inexistant.");
+end
+
 function vector:new(...)
 	local args = {...}
 	local m = {}
@@ -90,5 +95,6 @@ function vector.getlenght(vec1)
 	end
 	return s^.5
 end
+
 --
 return vector

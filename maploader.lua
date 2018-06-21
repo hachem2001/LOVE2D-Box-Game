@@ -7,7 +7,7 @@ function maploader.loadmap(filepath)
 	local layers = {} -- To store the quads
 	local spawn_points = {} -- To store the spawn points
 	local prev_start_count = 0
-	
+
 	for k, tileset in pairs(map.tilesets) do
 		local quads = {} -- to store the quads
 		local tile_set_name = tileset.name;
@@ -74,8 +74,9 @@ function maploader.loadmap(filepath)
 			end
 		end
 	end
-	local map = {tilesets = tilesets, layers = layers, spawn_points = spawn_points}
-	return map;
+	local to_return_map = {tilesets = tilesets, layers = layers, spawn_points = spawn_points,
+		w=map.width, h=map.height, tw=map.tilewidth, th=map.tileheight}
+	return to_return_map;
 end
 
 return maploader
