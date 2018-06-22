@@ -76,7 +76,7 @@ function love.draw()
 	gamemanager:draw()
 	]]--
 	camera:set()
-
+	love.graphics.setColor(1,1,1,1)
 	world:draw()
 	entmanager:draw()
 
