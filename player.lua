@@ -1,5 +1,0 @@
-local player = {}
-
-
-
-return player

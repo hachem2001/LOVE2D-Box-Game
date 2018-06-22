@@ -17,12 +17,12 @@ local player = entmanager:rawnew("base") -- Basically "INHERIT" what base.lua ha
 local world = world or error("World not loaded before the making of the player entitie") -- assure access to the world in order to be able to call it's functions
 local camera = camera or error("Camera not loaded before the use of the player entitie") -- assure access to the camera
 
-player.w, player.h, player.x, player.y = 32,32, 32, 32;
+player.w, player.h, player.x, player.y = 32, 32, 32, 32;
 player.color = colorutils:neww(123,123,188,255);
 player.collision = true -- Used to enable collision
 
 player.iscontrolled = true -- To be updated later
-player.movementspeed = 100 -- speed of movement
+player.movementspeed = 32*3 -- speed of movement
 
 --player.direction = vector:new(1,0)^1 -- the ^1 normalizes the vector.
 
@@ -61,7 +61,6 @@ function player:update(dt) -- Update the player info
 		self:move(mx, my);
 	end
 	camera:set_position(self.x, self.y)
-	print(self.x, self.y)
 end
 
 --
@@ -74,13 +73,14 @@ function player:keypressed(key, scancode, isrepeat) -- Checks if a key is presse
 end
 
 function player:move(x, y) -- moves the player by x and y, checks collision and sees if the movement is possible
-	self.x, self.y = self.x+x, self.y+y
 	if self.collision then
 		-- in our case AABB collision is used, so no need for checking, rather it'll be left for the world to simply make the collision work
-		local results = {world:collide(self)} -- note : the player's table is passed because the x and y will be automatically changed by the function.
-		-- This is possible because tables are passed by reference.
-		if results[1] == true then
-			print("Collision happened!") -- Just to test the return for now
+		X_AL, Y_AL = world:collide(self, x, y)
+		if not X_AL then
+			self.x = self.x + x;
+		end
+		if not Y_AL then
+			self.y = self.y + y;
 		end
 	end
 end

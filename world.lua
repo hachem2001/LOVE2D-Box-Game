@@ -30,36 +30,29 @@ function world:draw()
 	end
 end
 
-function world:collide(obj) -- AABB collision, returns how much to go out in X and Y
+function world:collide(obj, to_addx, to_addy) -- AABB collision, returns how much to go out in X and Y
 	local x, y, w, h = obj.x, obj.y, obj.w, obj.h;
+	local nx, ny = x+to_addx, y+to_addy;
 	local tw, th = self.map.tw, self.map.th;
+	local X_COLL = false;
+	local Y_COLL = false;
 	for k,v in pairs(self.collision_tiles) do
-		local dx = x-v.x;
-		local dy = y-v.y;
-		if dx < tw and dx > -w and dy < th and dy > -h then
-			print("COLLISION")
-			local depthx, depthy = 0,0;
-			if math.abs(dx-tw)>math.abs(dx+w) then
-				depthx = dx+w;
-			else
-				depthx = dx-tw;
-			end
-			if math.abs(dy-th)>math.abs(dy+h) then
-				depthy = dy+h;
-			else
-				depthy = dy-th;
-			end
-			if math.abs(depthx)>math.abs(depthy) then
-				depthx = 0;
-			else
-				depthy = 0;
-			end
-			obj.x = obj.x - depthx;
-			obj.y = obj.y - depthy;
-			return true, k, depthx, depthy -- collision happens? return the index of the collision tile, and the depth of the collision
+		X_COLL = X_COLL or self.coll(nx, y, w, h, v.x, v.y, tw, th);
+		Y_COLL = Y_COLL or self.coll(x, ny, w, h, v.x, v.y, tw, th);
+		if X_COLL and Y_COLL then
+			return X_COLL, Y_COLL;
 		end
 	end
-	return false -- no collision? return false.
+	return X_COLL, Y_COLL; -- no collision? return false.
+end
+
+function world.coll(x, y, w, h, x2, y2, h2, w2)
+	local dx = x-x2;
+	local dy = y-y2;
+	if (dx>=-w and dx<=w2 and dy>=-h and dy<=h2) then
+		return true
+	end
+	return false
 end
 
 return world;

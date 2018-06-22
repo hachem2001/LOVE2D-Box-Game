@@ -11,7 +11,8 @@ function maploader.loadmap(filepath)
 	for k, tileset in pairs(map.tilesets) do
 		local quads = {} -- to store the quads
 		local tile_set_name = tileset.name;
-		local tileset_image = love.graphics.newImage("images/"..tileset.image)
+		local tileset_image = love.graphics.newImage("images/"..tileset.image);
+		tileset_image:setFilter("nearest");
 		local tile_w, tile_h = tileset.grid.width, tileset.grid.height;
 		local image_width = tileset_image:getWidth();
 		local image_height = tileset_image:getHeight();
