@@ -21,13 +21,36 @@ function world:setmap(filepath)
 	entmanager:new("player", self.map.spawn_points[1])
 end
 
-function world:draw()
+function world:draw_background()
+	love.graphics.push()
+
+	love.graphics.setColor(1,1,1,1)
 	for layer=1,#self.map.layers do
 		local curlayer = self.map.layers[layer];
-		for k, spritebatch in pairs(curlayer.sprite_batches) do
-			love.graphics.draw(spritebatch);
+		if not curlayer.properties.foreground and not curlayer.properties.transparent then
+			for k, spritebatch in pairs(curlayer.sprite_batches) do
+				love.graphics.draw(spritebatch);
+			end
 		end
 	end
+
+	love.graphics.pop()
+end
+
+function world:draw_foreground()
+	love.graphics.push()
+
+	love.graphics.setColor(1,1,1,1)
+	for layer=1,#self.map.layers do
+		local curlayer = self.map.layers[layer];
+		if curlayer.properties.foreground and not curlayer.properties.transparent then
+			for k, spritebatch in pairs(curlayer.sprite_batches) do
+				love.graphics.draw(spritebatch);
+			end
+		end
+	end
+
+	love.graphics.pop()
 end
 
 function world:collide(obj, to_addx, to_addy) -- AABB collision, returns how much to go out in X and Y

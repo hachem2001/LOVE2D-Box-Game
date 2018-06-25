@@ -25,6 +25,14 @@ player.iscontrolled = true -- To be updated later
 player.movementspeed = 32*3 -- speed of movement
 
 --player.direction = vector:new(1,0)^1 -- the ^1 normalizes the vector.
+--
+--> SETUPS
+--
+ssmanager:add("player", 32, 32, 6, 3, "images/player/player.png") -- set up the animation of the player.
+
+--
+--> Functions
+--
 
 function player:setinfo(tbl) -- sets the info, self explanatory
 	player.x, player.y = tbl.x or player.x, tbl.y or player.y;
@@ -39,9 +47,12 @@ end
 function player:draw() -- Draw the player
 	love.graphics.push()
 
+		--[[ Old way of doing this
 		love.graphics.setColor(self.color)
 		love.graphics.rectangle("fill", self.x, self.y, self.w, self.h) -- draw the player
-
+		]]--
+		--v animated way of doing this
+		ssmanager:draw("player", self.x, self.y) -- the w and h are for now fixed
 	love.graphics.pop()
 end
 

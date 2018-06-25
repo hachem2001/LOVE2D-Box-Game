@@ -52,8 +52,10 @@ function love.load()
 		end
 	end]]--
 	
-	colorutils	= require "apis/colorutils"			-- Initialize the colorutils library
+	colorutils	= require "apis/colorutils"			-- Get the colorutils library
+	ssmanager	= require "spritesheetmanager"		-- Get the sprite sheet manager library
 
+	
 	camera 		= require "camera"					-- The camera library
 	maploader 	= require "maploader"				-- The map loader (mainly used by the world module)
 	entmanager	= require "entities"				-- Entmanager library for managing entities
@@ -63,6 +65,7 @@ function love.load()
 	
 	world:setmap("maps/test map.lua"); -- The world will, for this test, add the player automatically
 	--map = maploader.loadmap("maps/test map.lua")
+	
 	
 end
 
@@ -76,9 +79,10 @@ function love.draw()
 	gamemanager:draw()
 	]]--
 	camera:set()
-	love.graphics.setColor(1,1,1,1)
-	world:draw()
+
+	world:draw_background()
 	entmanager:draw()
+	world:draw_foreground()
 
 	camera:unset()
 end
@@ -94,6 +98,7 @@ function love.update(dt)
 		camera:rotate(math.pi/3 * dt);
 	end
 
+	ssmanager:update(dt)
 	entmanager:update(dt)
 	camera:update(dt)
 end

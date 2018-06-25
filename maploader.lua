@@ -65,7 +65,7 @@ function maploader.loadmap(filepath)
 					end
 				end
 			end
-			layers[k] = {offsetx = offsetx, offsety = offsety, width = layerwidth, height = layerheight, properties = properties, 
+			layers[#layers+1] = {offsetx = offsetx, offsety = offsety, width = layerwidth, height = layerheight, properties = properties, 
 				grid = grid,sprite_batches = sprite_batches};
 		elseif v.type=="objectgroup" then
 			if v.name:lower():match("spawn") then
