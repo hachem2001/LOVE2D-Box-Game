@@ -72,7 +72,7 @@ end
 function world.coll(x, y, w, h, x2, y2, h2, w2)
 	local dx = x-x2;
 	local dy = y-y2;
-	if (dx>=-w and dx<=w2 and dy>=-h and dy<=h2) then
+	if (dx>-w and dx<w2 and dy>-h and dy<h2) then
 		return true
 	end
 	return false

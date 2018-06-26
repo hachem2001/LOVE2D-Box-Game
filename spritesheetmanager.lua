@@ -19,7 +19,7 @@ function sprite_sheet_manager:add(name, quad_w, quad_h, num_quads, animation_len
         end
     end
 
-    self.sprite_sheets[name] = {quads=quads, num_quads = num_quads, cur_time = 0, animation_length=animation_length, paused= false, img=image} -- It will be referenced by name (ex : player for player's)
+    self.sprite_sheets[name] = {quads=quads, quad_w=quad_w, quad_h=quad_h, num_quads = num_quads, cur_time = 0, animation_length=animation_length, paused= false, img=image} -- It will be referenced by name (ex : player for player's)
 end
 
 function sprite_sheet_manager:pause(name)
@@ -43,9 +43,10 @@ function sprite_sheet_manager:update(dt)
     end
 end
 
-function sprite_sheet_manager:draw(name, x, y)
+function sprite_sheet_manager:draw(name, x, y, w, h)
     local m = self.sprite_sheets[name]
-    love.graphics.draw(m.img, m.quads[math.ceil(m.num_quads * (m.cur_time)/(m.animation_length))], x, y);
+    local scalex, scaley = w and w/m.quad_w or 1, h and h/m.quad_h or 1;
+    love.graphics.draw(m.img, m.quads[math.ceil(m.num_quads * (m.cur_time)/(m.animation_length))], x, y, nil, scalex, scaley);
 end
 
 return sprite_sheet_manager -- this could be shortened to ssmanager in main.lua

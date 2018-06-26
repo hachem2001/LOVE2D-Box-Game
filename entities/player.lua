@@ -37,8 +37,6 @@ ssmanager:add("player", 32, 32, 6, 3, "images/player/player.png") -- set up the 
 function player:setinfo(tbl) -- sets the info, self explanatory
 	player.x, player.y = tbl.x or player.x, tbl.y or player.y;
 	player.w, player.h = tbl.w or player.w, tbl.h or player.h;
-
-	player.movementspeed = 100*self.w/32;
 end
 
 --
@@ -52,7 +50,8 @@ function player:draw() -- Draw the player
 		love.graphics.rectangle("fill", self.x, self.y, self.w, self.h) -- draw the player
 		]]--
 		--v animated way of doing this
-		ssmanager:draw("player", self.x, self.y) -- the w and h are for now fixed
+		love.graphics.setColor(self.color)
+		ssmanager:draw("player", self.x, self.y, self.w, self.h) -- the w and h are for now fixed
 	love.graphics.pop()
 end
 
@@ -71,7 +70,7 @@ function player:update(dt) -- Update the player info
 		end
 		self:move(mx, my);
 	end
-	camera:set_position(self.x, self.y)
+	camera:set_position(math.floor(self.x+self.w/2), math.floor(self.y+self.h/2))
 end
 
 --
