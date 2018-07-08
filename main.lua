@@ -74,10 +74,12 @@ end
 --
 
 function love.draw()
-	--[[
-	love.graphics.setBackgroundColor(generalbackgroundcolor)
-	gamemanager:draw()
-	]]--
+	love.window.setTitle(love.timer.getFPS());
+
+	--> Background
+	--< End Background
+
+	--> World
 	camera:set()
 
 	world:draw_background()
@@ -85,6 +87,8 @@ function love.draw()
 	world:draw_foreground()
 
 	camera:unset()
+	--< End World
+	love.graphics.print("hello", 100, 200);
 end
 
 function love.update(dt)
